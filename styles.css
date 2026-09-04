@@ -1,0 +1,143 @@
+/* =========================================================
+   style.css
+   Estilos complementares ao Tailwind (que cobre 90% do layout).
+   Aqui ficam apenas: grid de cards, cores das notas e microinterações.
+   ========================================================= */
+
+/* Grid responsivo estilo "masonry" simplificado (colunas fluidas) */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  
+  /* Card de nota */
+  .note-card {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+  }
+  
+  .note-card:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+  
+  .note-card .note-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+    word-break: break-word;
+  }
+  
+  .note-card .note-content {
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+  }
+  
+  .note-card .note-tag {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+  
+  .note-card .pin-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.35);
+  }
+  
+  /* Botão de exclusão rápida (aparece no hover) */
+  .note-card .quick-delete {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    color: rgba(0, 0, 0, 0.4);
+  }
+  .note-card:hover .quick-delete {
+    opacity: 1;
+  }
+  .note-card .quick-delete:hover {
+    color: #ef4444;
+  }
+  
+  /* Paleta de cores disponíveis para as notas (mesmas classes usadas no JS) */
+  .color-white   { background-color: #ffffff; }
+  .color-red     { background-color: #fecaca; }
+  .color-orange  { background-color: #fed7aa; }
+  .color-yellow  { background-color: #fef08a; }
+  .color-green   { background-color: #bbf7d0; }
+  .color-blue    { background-color: #bfdbfe; }
+  .color-purple  { background-color: #e9d5ff; }
+  .color-pink    { background-color: #fbcfe8; }
+  .color-gray    { background-color: #e5e7eb; }
+  
+  /* Botões do seletor de cor dentro do modal */
+  .color-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .color-dot:hover {
+    transform: scale(1.15);
+  }
+  .color-dot.selected {
+    border-color: #6b7280;
+  }
+  
+  /* Botões de filtro por tag */
+  .tag-filter-btn {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #4b5563;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .tag-filter-btn:hover {
+    background: #e5e7eb;
+  }
+  .tag-filter-btn.active-filter {
+    background: #1f2937;
+    color: #fff;
+  }
+  
+  /* Modal */
+  #modalOverlay.flex {
+    display: flex;
+  }
+  #noteTitle, #noteContent {
+    background: transparent;
+  }
+  
+  /* Scrollbar discreta na barra de tags */
+  #tagFilterBar::-webkit-scrollbar {
+    height: 4px;
+  }
+  #tagFilterBar::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }

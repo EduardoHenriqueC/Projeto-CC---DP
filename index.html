@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeepNotes | Suas anotações organizadas</title>
+
+  <!-- Tailwind via CDN (sem necessidade de build) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="bg-white shadow-sm sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+      <div class="flex items-center gap-2 shrink-0">
+        <i class="fa-regular fa-lightbulb text-2xl text-amber-400"></i>
+        <h1 class="text-xl font-semibold text-gray-700 hidden sm:block">KeepNotes</h1>
+      </div>
+
+      <!-- Barra de busca -->
+      <div class="flex-1 max-w-2xl mx-auto">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Buscar por título, conteúdo ou tag..."
+            class="w-full bg-gray-100 hover:bg-white focus:bg-white border border-transparent focus:border-gray-300 rounded-lg py-2 pl-11 pr-4 outline-none transition-colors"
+          />
+        </div>
+      </div>
+
+      <button
+        id="btnNovaNota"
+        class="shrink-0 bg-amber-400 hover:bg-amber-500 text-white font-medium px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+      >
+        <i class="fa-solid fa-plus"></i>
+        <span class="hidden sm:inline">Nova nota</span>
+      </button>
+    </div>
+
+    <!-- Filtro de tags -->
+    <div class="max-w-7xl mx-auto px-4 pb-3 flex items-center gap-2 overflow-x-auto" id="tagFilterBar">
+      <button data-tag="Todas" class="tag-filter-btn active-filter">Todas</button>
+      <!-- tags dinâmicas inseridas via JS -->
+    </div>
+  </header>
+
+  <!-- ===================== CONTEÚDO ===================== -->
+  <main class="max-w-7xl mx-auto px-4 py-6">
+
+    <!-- Notas fixadas -->
+    <section id="pinnedSection" class="mb-8 hidden">
+      <h2 class="text-xs font-semibold uppercase text-gray-500 tracking-wide mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-thumbtack"></i> Fixadas
+      </h2>
+      <div id="pinnedGrid" class="notes-grid"></div>
+    </section>
+
+    <!-- Outras notas -->
+    <section>
+      <h2 id="othersLabel" class="text-xs font-semibold uppercase text-gray-500 tracking-wide mb-3">
+        Notas
+      </h2>
+      <div id="notesGrid" class="notes-grid"></div>
+      <p id="emptyState" class="text-center text-gray-400 py-20 hidden">
+        <i class="fa-regular fa-note-sticky text-5xl mb-4 block"></i>
+        Nenhuma nota encontrada. Crie a primeira clicando em "Nova nota"!
+      </p>
+    </section>
+  </main>
+
+  <!-- ===================== MODAL (Criar/Editar) ===================== -->
+  <div id="modalOverlay" class="fixed inset-0 bg-black/40 z-40 hidden items-center justify-center p-4">
+    <div id="modalBox" class="bg-white w-full max-w-lg rounded-xl shadow-xl overflow-hidden">
+      <form id="noteForm">
+        <input type="hidden" id="noteId" />
+
+        <div class="p-4">
+          <input
+            id="noteTitle"
+            type="text"
+            placeholder="Título"
+            class="w-full text-lg font-semibold outline-none placeholder-gray-400"
+          />
+          <textarea
+            id="noteContent"
+            rows="6"
+            placeholder="Criar uma nota..."
+            class="w-full mt-2 outline-none placeholder-gray-400 resize-none"
+          ></textarea>
+
+          <!-- Tag -->
+          <div class="mt-3">
+            <label class="text-xs font-medium text-gray-500 block mb-1">Etiqueta / Tag</label>
+            <input
+              id="noteTag"
+              list="tagSuggestions"
+              type="text"
+              placeholder="Ex.: Aulas, Trabalho, Ideias..."
+              class="w-full bg-gray-100 rounded-lg px-3 py-2 text-sm outline-none"
+            />
+            <datalist id="tagSuggestions"></datalist>
+          </div>
+
+          <!-- Cores -->
+          <div class="mt-3">
+            <label class="text-xs font-medium text-gray-500 block mb-2">Cor</label>
+            <div id="colorPicker" class="flex items-center gap-2 flex-wrap"></div>
+          </div>
+        </div>
+
+        <!-- Rodapé do modal -->
+        <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <button
+            type="button"
+            id="btnTogglePin"
+            class="text-gray-500 hover:text-amber-500 transition-colors"
+            title="Fixar nota"
+          >
+            <i class="fa-solid fa-thumbtack"></i>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              id="btnDeleteNote"
+              class="hidden text-sm text-gray-500 hover:text-red-500 px-3 py-1.5 transition-colors"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+            <button
+              type="button"
+              id="btnCancelModal"
+              class="text-sm text-gray-600 hover:bg-gray-200 px-3 py-1.5 rounded-md transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="text-sm bg-amber-400 hover:bg-amber-500 text-white px-4 py-1.5 rounded-md font-medium transition-colors"
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
