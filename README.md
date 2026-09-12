@@ -58,6 +58,6 @@ python3 -m http.server 8080
 
 Depois acesse `http://localhost:8080` (ou a porta indicada no terminal).
 
-## Fluxo de trabalho colaborativo
+Fluxo de trabalho colaborativo
 Este projeto segue o fluxo de branches individuais, revisão via Pull Request 
 e resolução de conflitos de merge, simulando o trabalho de equipes reais no GitHub.
