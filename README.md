@@ -61,3 +61,10 @@ Depois acesse `http://localhost:8080` (ou a porta indicada no terminal).
 Fluxo de trabalho colaborativo
 Este projeto segue o fluxo de branches individuais, revisão via Pull Request 
 e resolução de conflitos de merge, simulando o trabalho de equipes reais no GitHub.
+
+## Resolução de conflito de merge
+Durante a atividade, dois branches (feature/conflito-a e feature/conflito-b) 
+alteraram a mesma linha do README de forma diferente. Ao tentar mesclar o 
+segundo branch, o GitHub identificou o conflito. A resolução foi feita 
+através do editor web do GitHub, combinando/escolhendo o texto final da 
+linha e removendo as marcações de conflito antes de confirmar o merge.
